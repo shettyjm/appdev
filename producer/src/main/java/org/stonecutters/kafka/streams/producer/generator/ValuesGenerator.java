@@ -42,7 +42,7 @@ public class ValuesGenerator {
 
     @Outgoing("temperature-values")                                        
     public Multi<Record<Integer, String>> generate() {
-        return Multi.createFrom().ticks().every(Duration.ofMillis(500))    
+        return Multi.createFrom().ticks().every(Duration.ofMillis(500 * 60 * 60))  // changed to every hour  
                 .onOverflow().drop()
                 .map(tick -> {
                     WeatherStation station = stations.get(random.nextInt(stations.size()));
