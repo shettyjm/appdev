@@ -42,7 +42,7 @@ public class WaterUsageEventGenerator {
                         new HydrologicRegion(9, "Northern Coast", 71),
                         new HydrologicRegion(9, "San FranciscoBay", 71));
 
-    @Outgoing("water-pc-consumption-values")                                        
+    @Outgoing("water-consumption-values")                                        
     public Multi<Record<Integer, String>> generate() {
         return Multi.createFrom().ticks().every(Duration.ofMillis(500))    
                 .onOverflow().drop()
