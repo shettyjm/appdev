@@ -44,7 +44,7 @@ public class WaterUsageEventGenerator {
 
     @Outgoing("water-consumption-values")                                        
     public Multi<Record<Integer, String>> generate() {
-        return Multi.createFrom().ticks().every(Duration.ofMillis(500))    
+        return Multi.createFrom().ticks().every(Duration.ofMillis(1000))    
                 .onOverflow().drop()
                 .map(tick -> {
                     HydrologicRegion hydroRegion = hydorRegions.get(random.nextInt(hydorRegions.size()));

@@ -23,7 +23,7 @@ import io.quarkus.kafka.client.serialization.ObjectMapperSerde;
 @ApplicationScoped
 public class TopologyProducer {
 
-    static final String HYDROLOGIC_REGIONS_STORE = "weather-stations-store";
+    static final String HYDROLOGIC_REGIONS_STORE = "hydrologic-regions-store";
 
     private static final String HYDROLOGIC_REGIONS_TOPIC = "hydrologic-regions";
     private static final String WATER_CONSUMPTIONS_TOPIC = "water-consumption-values";
