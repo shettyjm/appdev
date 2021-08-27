@@ -14,23 +14,36 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.stonecutters.kafka.streams.water.aggregator.streams.GetHydrologicRegionDataResult;
+import org.stonecutters.kafka.streams.water.aggregator.streams.GetHydrologicRegionsDataResult;
 import org.stonecutters.kafka.streams.water.aggregator.streams.InteractiveQueries;
 
 @ApplicationScoped
-@Path("/hydrologic-regions")
+@Path("/hydrologicregions")
 public class HydrolicRegionEndpoint {
     @Inject
     InteractiveQueries interactiveQueries;
 
     @GET
-    @Path("/data/{id}")
+    @Path("/")
+    public Response getHydrologicRegionsData() {
+        GetHydrologicRegionsDataResult result = interactiveQueries.getHydrologicRegionsData();
+
+        if (result.getResult().isPresent()) {
+            return Response.ok(result.getResult().get()).build();
+        } else {
+            return Response.status(Status.NOT_FOUND.getStatusCode(), "No data found for hydologic regions station ").build();
+        }
+    }
+
+    @GET
+    @Path("/{id}")
     public Response getHydrologicRegionData(@PathParam("id") int id) {
         GetHydrologicRegionDataResult result = interactiveQueries.getHydrologicRegionData(id);
 
         if (result.getResult().isPresent()) {
             return Response.ok(result.getResult().get()).build();
         } else {
-            return Response.status(Status.NOT_FOUND.getStatusCode(), "No data found for weather station " + id).build();
+            return Response.status(Status.NOT_FOUND.getStatusCode(), "No data found for hydrologic region " + id).build();
         }
     }
 }

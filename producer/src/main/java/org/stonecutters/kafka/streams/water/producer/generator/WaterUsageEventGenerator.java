@@ -39,8 +39,8 @@ public class WaterUsageEventGenerator {
                         new HydrologicRegion(7, "Statewide Average", 85),
                         new HydrologicRegion(8, "South Coast", 80),
                         new HydrologicRegion(9, "Central Coast", 71),
-                        new HydrologicRegion(9, "Northern Coast", 71),
-                        new HydrologicRegion(9, "San FranciscoBay", 71));
+                        new HydrologicRegion(10, "Northern Coast", 71),
+                        new HydrologicRegion(11, "San FranciscoBay", 71));
 
     @Outgoing("water-consumption-values")                                        
     public Multi<Record<Integer, String>> generate() {
@@ -48,7 +48,12 @@ public class WaterUsageEventGenerator {
                 .onOverflow().drop()
                 .map(tick -> {
                     HydrologicRegion hydroRegion = hydorRegions.get(random.nextInt(hydorRegions.size()));
-                    double averageDailyPerCapitaUsage = BigDecimal.valueOf(random.nextGaussian() * 15 + hydroRegion.averageDailyPerCapitaUsage)
+
+                   
+                    double averageDailyPerCapitaUsage = BigDecimal.valueOf(
+                        random.nextInt((11) )
+                        // random.nextGaussian() * 15 
+                        + hydroRegion.averageDailyPerCapitaUsage)
                             .setScale(1, RoundingMode.HALF_UP)
                             .doubleValue();
 

@@ -22,12 +22,15 @@ public class Aggregation {
 
         count++;
         sum += waterConsumedEvent.value;
-        avg = BigDecimal.valueOf(sum / count)
-                .setScale(1, RoundingMode.HALF_UP).doubleValue();
+        avg = BigDecimal.valueOf(sum / count).setScale(1, RoundingMode.HALF_UP).doubleValue();
 
         min = Math.min(min, waterConsumedEvent.value);
         max = Math.max(max, waterConsumedEvent.value);
 
         return this;
+    }
+
+    public String toString() {
+        return "{ \n" + "hlRegionId :" + this.hlRegionId + "\n" + "hlRegionName :" + this.hlRegionName + "\n" + "\n}";
     }
 }
