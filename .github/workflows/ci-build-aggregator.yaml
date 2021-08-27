@@ -39,7 +39,7 @@ jobs:
       CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
       GROUP_ID: ${{ secrets.GROUP_ID }}
       OAUTH_TOKEN_ENDPOINT_URI: ${{ secrets.OAUTH_TOKEN_ENDPOINT_URI }}
-      APP_ID: APPDEV_APP_GHA_1234
+      APP_ID: APPDEV_APP_GHA_12345
       
 
    #   PROJECT_ID: ${{ secrets.PROJECT_ID }}
