@@ -95,13 +95,14 @@ jobs:
       - name: Run quarkus native package building
         run: |     
            cd $GITHUB_WORKSPACE/producer && ./mvnw package -Pnative -Dquarkus.container-image.builder=docker -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true -Dquarkus.container-image.tag=${{ steps.vars.outputs.sha_short }} 
+           docker images
      #   cd $GITHUB_WORKSPACE && ./mvnw package -Pnative 
      #     cd $GITHUB_WORKSPACE &&
      #         docker image tag runner/$SERVICE_NAME:${{ steps.vars.outputs.sha_short }}    gcr.io/$PROJECT_ID/$SERVICE_NAME:${{ steps.vars.outputs.sha_short }}
 
       - name: list docker images
         run:  docker images 
-      - name: tag imge for gcr push
+      - name: tag imge for quay.io push
         run : |
            docker login -u=${{ secrets.DOCKER_USER }} -p=${{ secrets.DOCKER_PASSWORD }} quay.io
            docker image tag runner/kafka-streams-appdevdemo-producer:${{ steps.vars.outputs.sha_short }}    quay.io/jmaira/appdev_aggregator:${{ steps.vars.outputs.sha_short }}

@@ -6,7 +6,7 @@ name: CI-quarkus-kafka-aggregator
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
+    branches: [ main-b ]
 #   pull_request:
 #     branches: [ main ]
 
