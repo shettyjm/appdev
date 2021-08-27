@@ -107,7 +107,7 @@ jobs:
            docker login -u=${{ secrets.DOCKER_USER }} -p=${{ secrets.DOCKER_PASSWORD }} quay.io
            docker image tag runner/kafka-streams-appdevdemo-producer:${{ steps.vars.outputs.sha_short }}    quay.io/jmaira/appdev_aggregator:${{ steps.vars.outputs.sha_short }}
            docker images 
-           docker quay.io/jmaira/appdev_producer:${{ steps.vars.outputs.sha_short }}
+           docker push quay.io/jmaira/appdev_producer:${{ steps.vars.outputs.sha_short }}
         
       - name: Run a one-line script
         run: echo Hello, world!
