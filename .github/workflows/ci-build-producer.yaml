@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI-quarkus-kafka-aggregator
+name: CI-quarkus-kafka-producer
 
 # Controls when the workflow will run
 on:
@@ -94,7 +94,7 @@ jobs:
         
       - name: Run quarkus native package building
         run: |     
-           cd $GITHUB_WORKSPACE/aggregator && ./mvnw package -Pnative -Dquarkus.container-image.builder=docker -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true -Dquarkus.container-image.tag=${{ steps.vars.outputs.sha_short }} 
+           cd $GITHUB_WORKSPACE/producer && ./mvnw package -Pnative -Dquarkus.container-image.builder=docker -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true -Dquarkus.container-image.tag=${{ steps.vars.outputs.sha_short }} 
      #   cd $GITHUB_WORKSPACE && ./mvnw package -Pnative 
      #     cd $GITHUB_WORKSPACE &&
      #         docker image tag runner/$SERVICE_NAME:${{ steps.vars.outputs.sha_short }}    gcr.io/$PROJECT_ID/$SERVICE_NAME:${{ steps.vars.outputs.sha_short }}
@@ -104,9 +104,9 @@ jobs:
       - name: tag imge for gcr push
         run : |
            docker login -u=${{ secrets.DOCKER_USERNAME }} -p=${{ secrets.DOCKER_PASSWORD }} quay.io
-           docker image tag runner/aggregator:${{ steps.vars.outputs.sha_short }}    quay.io/jmaira/appdev_aggregator:${{ steps.vars.outputs.sha_short }}
+           docker image tag runner/producer:${{ steps.vars.outputs.sha_short }}    quay.io/jmaira/appdev_aggregator:${{ steps.vars.outputs.sha_short }}
            docker images 
-           docker push quay.io/jmaira/appdev_aggregator:${{ steps.vars.outputs.sha_short }}
+           docker quay.io/jmaira/appdev_producer:${{ steps.vars.outputs.sha_short }}
         
       - name: Run a one-line script
         run: echo Hello, world!
