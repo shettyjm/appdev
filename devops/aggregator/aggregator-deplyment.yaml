@@ -1,0 +1,37 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: appdev-demo-aggregator-deployment
+  # namespace: appdevdemo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aggregator
+  template:
+    metadata:
+      
+      labels:
+        app: aggregator
+    spec:
+      containers:
+        - name: aggregator
+          image: 'quay.io/jmaira/appdev_aggregator:0.0.5'
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: CLIENT_ID
+              value: changeme
+            - name: CLIENT_SECRET
+              value: changeme
+            - name: GROUP_ID
+              value: changeme
+            - name: OAUTH_TOKEN_ENDPOINT_URI
+              value: >-
+                changeme
+            - name: APP_ID
+              value: changeme
+            - name: BOOTSTRAP_SERVER
+              value: 'changeme'
+          
