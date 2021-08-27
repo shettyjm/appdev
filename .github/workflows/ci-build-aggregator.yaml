@@ -104,7 +104,7 @@ jobs:
       - name: tag imge for gcr push
         run : |
            docker login -u=${{ secrets.DOCKER_USERNAME }} -p=${{ secrets.DOCKER_PASSWORD }} quay.io
-           docker image tag runner/aggregator:${{ steps.vars.outputs.sha_short }}    quay.io/jmaira/appdev_aggregator:${{ steps.vars.outputs.sha_short }}
+           docker image tag runner/kafka-streams-appdevdemo-aggregator:${{ steps.vars.outputs.sha_short }}    quay.io/jmaira/appdev_aggregator:${{ steps.vars.outputs.sha_short }}
            docker images 
            docker push quay.io/jmaira/appdev_aggregator:${{ steps.vars.outputs.sha_short }}
         
