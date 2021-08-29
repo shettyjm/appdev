@@ -21,17 +21,36 @@ spec:
             - containerPort: 8080
               protocol: TCP
           env:
-            - name: CLIENT_ID
-              value: changeme
-            - name: CLIENT_SECRET
-              value: changeme
             - name: GROUP_ID
-              value: changeme
-            - name: OAUTH_TOKEN_ENDPOINT_URI
-              value: >-
-                changeme
-            - name: APP_ID
-              value: changeme
+              value: appdev-demo-group-quarkus-weathrs-e7dd6ed342f5
             - name: BOOTSTRAP_SERVER
-              value: 'changeme'
+              valueFrom:
+                configMapKeyRef:
+                  name: appdev-demo-cm
+                  key: appdevdemo.property.BOOTSTRAP_SERVER
+            - name: CLIENT_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: appdev-demo-cm
+                  key: appdevdemo.property.CLIENT_ID
+            - name: CLIENT_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: appdev-demo-cm
+                  key: appdevdemo.property.CLIENT_SECRET
+            - name: OAUTH_TOKEN_ENDPOINT_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: appdev-demo-cm
+                  key: appdevdemo.property.OAUTH_TOKEN_ENDPOINT_URI
+            - name: APP_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: appdev-demo-cm
+                  key: appdevdemo.property.APP_ID
+            - name: GROUP_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: appdev-demo-cm
+                  key: appdevdemo.property.GROUP_ID
           
