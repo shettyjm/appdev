@@ -92,6 +92,29 @@ jobs:
       - name: Set commit tag sha1 outputs
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+      - name: new docker image tag for kustomize
+        env:
+          NEW_TAG: ${{ steps.vars.outputs.sha_short }}
+        run: |
+          WORK_DIR=$(pwd)
+          echo $WORK_DIR
+          KUSTOMIZE_HOME=$(mktemp -d)
+          echo $KUSTOMIZE_HOME
+          ls $KUSTOMIZE_HOME
+          cp $WORK_DIR/devops/producer/producer-deployment.yaml $KUSTOMIZE_HOME/deploy.yaml
+          cd $KUSTOMIZE_HOME
+          kustomize create --resources deploy.yaml
+          kustomize edit set image "quay.io/jmaira/appdev_producer"="quay.io/jmaira/appdev_producer:"$NEW_TAG
+          cd $WORK_DIR
+          kustomize build $KUSTOMIZE_HOME > $WORK_DIR/devops/producer/producer-deployment.yaml
+      - name: Commit files
+        run: |
+          cd $(pwd)/ss-devops
+         
+          
+          git add devops/producer/producer-deployment.yaml
+          git commit -am "Bump docker tag to ${NEW_TAG} "
+          git push origin main
         
       - name: Run quarkus native package building
         run: |     
@@ -110,11 +133,11 @@ jobs:
            docker images 
            docker push quay.io/jmaira/appdev_producer:${{ steps.vars.outputs.sha_short }}
         
-      - name: Setup Kustomize
+      - name: Setup Kustomizea
         uses: imranismail/setup-kustomize@v1
         with:
             kustomize-version: "3.8.7"
-      - name: new docker image tag for kustomize
+      - name: new docker image tag for kustomizea
         env:
           NEW_TAG: ${{ steps.vars.outputs.sha_short }}
         run: |
@@ -123,21 +146,20 @@ jobs:
           KUSTOMIZE_HOME=$(mktemp -d)
           echo $KUSTOMIZE_HOME
           ls $KUSTOMIZE_HOME
-          cp ss-devops/shotstories/app/14-deploy-invites-svc-backend.yaml $KUSTOMIZE_HOME/deploy.yaml
+          cp $WORK_DIR/devops/producer/producer-deployment.yaml $KUSTOMIZE_HOME/deploy.yaml
           cd $KUSTOMIZE_HOME
           kustomize create --resources deploy.yaml
-          kustomize edit set image "gcr.io/shotstories-prod/test/invites"="gcr.io/shotstories-prod/test/invites:"$NEW_TAG
+          kustomize edit set image "quay.io/jmaira/appdev_producer"="quay.io/jmaira/appdev_producer:"$NEW_TAG
           cd $WORK_DIR
-          kustomize build $KUSTOMIZE_HOME > ss-devops/shotstories/app/14-deploy-invites-svc-backend.yaml
+          kustomize build $KUSTOMIZE_HOME > $WORK_DIR/devops/producer/producer-deployment.yaml
       - name: Commit files
         run: |
           cd $(pwd)/ss-devops
-          git remote add ss-devops https://$USERNAME:$REPO_KEY@github.com/shotstories/ss-devops.git
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add shotstories/app/14-deploy-invites-svc-backend.yaml
+         
+          
+          git add devops/producer/producer-deployment.yaml
           git commit -am "Bump docker tag to ${NEW_TAG} "
-          git push ss-devops
+          git push origin main
       - name: Run a one-line script
         run: echo Hello, world!
 
