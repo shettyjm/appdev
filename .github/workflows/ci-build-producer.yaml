@@ -112,7 +112,7 @@ jobs:
         
       - name: Setup Kustomize
         uses: imranismail/setup-kustomize@v1
-         with:
+        with:
             kustomize-version: "3.8.7"
       - name: new docker image tag for kustomize
         env:
