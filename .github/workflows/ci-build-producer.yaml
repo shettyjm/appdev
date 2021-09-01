@@ -113,9 +113,14 @@ jobs:
           ls -ltra
          
           
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git add devops/producer/producer-deployment.yaml
           git commit -am "Bump docker tag to ${NEW_TAG} "
           git push origin main
+        env :
+          REPO_KEY :  ${{ secrets.GITHUB_TOKEN}}
+          USERNAME : github-actions
         
       - name: Run quarkus native package building
         run: |     
