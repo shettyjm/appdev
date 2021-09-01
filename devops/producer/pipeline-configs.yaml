@@ -1,0 +1,71 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+spec:
+  params:
+    - default: quay-credentials
+      description: name of the secret holding the quay credentials
+      name: quay-credentials-secret
+      type: string
+  resources:
+    inputs:
+      - name: source
+        type: git
+    outputs:
+      - name: builtImage
+        type: image
+  steps:
+    - args:
+        - clean
+        - package
+        - '-Dquarkus.container-image.push=true'
+        - '-DskipTests'
+        - '-Dquarkus.container-image.tag=23432'
+      command:
+        - mvn
+      env:
+        - name: QUARKUS_CONTAINER_IMAGE_IMAGE
+          value: $(outputs.resources.builtImage.url)
+        - name: QUARKUS_CONTAINER_IMAGE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: quay-username
+              name: $(params.quay-credentials-secret)
+        - name: QUARKUS_CONTAINER_IMAGE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: quay-password
+              name: $(params.quay-credentials-secret)
+      image: 'docker.io/maven:3.6-jdk-11-slim'
+      name: maven-build
+      
+      workingDir: /workspace/source/producer
+
+---
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  
+  name: build-app-run
+  namespace: appdevdemo
+  labels:
+    app.kubernetes.io/managed-by: tekton-pipelines
+    tekton.dev/task: build-quarkus-app
+spec:
+  serviceAccountName: appdevdemo-tekton-sa
+  params:
+    - name: quay-credentials-secret
+      value: quay-credentials
+  resources:
+    inputs:
+      - name: source
+        resourceRef:
+          name: git-source
+    outputs:
+      - name: builtImage
+        resourceRef:
+          name: appdev-producer-image
+  
+  taskRef:
+    kind: Task
+    name: build-quarkus-app
+  timeout: 1h0m0s

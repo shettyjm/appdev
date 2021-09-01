@@ -1,0 +1,128 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+spec:
+  params:
+    - default: quay-credentials
+      description: name of the secret holding the quay credentials
+      name: quay-credentials-secret
+      type: string
+    - default: producer
+      description: the context dir within source
+      name: contextDir
+      type: string
+    - default: image-tag
+      description: name of the parameter holding iamge tag
+      name: image-tag
+      type: string
+    - default: app_id
+      description: name of the parameter holding app_id
+      name: app_id
+      type: string
+  resources:
+    inputs:
+      - name: source
+        type: git
+    outputs:
+      - name: builtImage
+        type: image
+  steps:
+    - args:
+        - clean
+        - package
+        - '-Dquarkus.container-image.push=true'
+        - '-DskipTests'
+      command:
+        - mvn
+      env:
+        - name: APP_ID
+          value: $(params.app_id)
+        - name: backout-PR
+          value: $(outputs.resources.builtImage.url)
+        - name: QUARKUS_CONTAINER_IMAGE_IMAGE
+          value: 'quay.io/jmaira/appdev_aggregator:$(params.image-tag)'
+        - name: QUARKUS_CONTAINER_IMAGE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: quay-username
+              name: $(params.quay-credentials-secret)
+        - name: QUARKUS_CONTAINER_IMAGE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: quay-password
+              name: $(params.quay-credentials-secret)
+      image: 'docker.io/maven:3.6-jdk-11-slim'
+      name: maven-build
+      resources: {}
+      workingDir: /workspace/source/$(params.contextDir)
+---
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  
+  name: build-app-run-aggre-1612mn
+  namespace: appdevdemo
+  labels:
+    app.kubernetes.io/managed-by: tekton-pipelines
+    tekton.dev/task: build-quarkus-demo-app
+spec:
+  serviceAccountName: appdevdemo-tekton-sa
+  params:
+    - name: quay-credentials-secret
+      value: quay-credentials
+    - name: contextDir
+      value: aggregator
+    - name: image-tag
+      value: mysha123
+    - name: app_id
+      value: '213123'
+   
+  
+  resources:
+    inputs:
+      - name: source
+        resourceRef:
+          name: git-source
+    outputs:
+      - name: builtImage
+        resourceRef:
+          name: appdev-aggregator-image
+  
+  taskRef:
+    kind: Task
+    name: build-quarkus-app
+  timeout: 1h0m0s
+
+
+----
+
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  
+  name: build-app-run-1612mn
+  namespace: appdevdemo
+  labels:
+    app.kubernetes.io/managed-by: tekton-pipelines
+    tekton.dev/task: build-quarkus-demo-app
+spec:
+  serviceAccountName: appdevdemo-tekton-sa
+  params:
+    - name: quay-credentials-secret
+      value: quay-credentials
+    - name: contextDir
+      value: producer
+  
+  resources:
+    inputs:
+      - name: source
+        resourceRef:
+          name: git-source
+    outputs:
+      - name: builtImage
+        resourceRef:
+          name: appdev-producer-image
+  
+  taskRef:
+    kind: Task
+    name: build-app
+  timeout: 1h0m0s

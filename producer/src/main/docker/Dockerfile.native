@@ -11,7 +11,7 @@
 #
 # Then run the container using:
 #
-# docker run  --env-file env.values -i  --rm -p 8080:8080 quay.io/jmaira/demos:0.0.3
+# docker run  --env-file env.values -i  --rm -p 8080:8081 quay.io/jmaira/appdev_aggregator:0.0.5
 #
 ###
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.4
@@ -24,4 +24,4 @@ COPY --chown=1001:root target/*-runner /work/application
 EXPOSE 8080
 USER 1001
 
-CMD ["./application", "-Dquarkus.http.host=0.0.0.0 -Dquarkus.profile=prod"]
+CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
