@@ -1,5 +1,5 @@
-kind: Deployment
 apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: appdev-demo-producer-deployment
 spec:
@@ -9,45 +9,43 @@ spec:
       app: producer
   template:
     metadata:
-     
       labels:
         app: producer
     spec:
       containers:
-        - name: producer
-          image: 'quay.io/jmaira/appdev_producer:48fba73'
-          ports:
-            - containerPort: 8080
-              protocol: TCP
-          env:
-            - name: GROUP_ID
-              valueFrom:
-                configMapKeyRef:
-                  name: appdev-demo-cm
-                  key: appdevdemo.property.GROUP_ID
-            - name: BOOTSTRAP_SERVER
-              valueFrom:
-                configMapKeyRef:
-                  name: appdev-demo-cm
-                  key: appdevdemo.property.BOOTSTRAP_SERVER
-            - name: CLIENT_ID
-              valueFrom:
-                configMapKeyRef:
-                  name: appdev-demo-cm
-                  key: appdevdemo.property.CLIENT_ID
-            - name: CLIENT_SECRET
-              valueFrom:
-                configMapKeyRef:
-                  name: appdev-demo-cm
-                  key: appdevdemo.property.CLIENT_SECRET
-            - name: OAUTH_TOKEN_ENDPOINT_URI
-              valueFrom:
-                configMapKeyRef:
-                  name: appdev-demo-cm
-                  key: appdevdemo.property.OAUTH_TOKEN_ENDPOINT_URI
-            - name: APP_ID
-              valueFrom:
-                configMapKeyRef:
-                  name: appdev-demo-cm
-                  key: appdevdemo.property.APP_ID
-  
+      - env:
+        - name: GROUP_ID
+          valueFrom:
+            configMapKeyRef:
+              key: appdevdemo.property.GROUP_ID
+              name: appdev-demo-cm
+        - name: BOOTSTRAP_SERVER
+          valueFrom:
+            configMapKeyRef:
+              key: appdevdemo.property.BOOTSTRAP_SERVER
+              name: appdev-demo-cm
+        - name: CLIENT_ID
+          valueFrom:
+            configMapKeyRef:
+              key: appdevdemo.property.CLIENT_ID
+              name: appdev-demo-cm
+        - name: CLIENT_SECRET
+          valueFrom:
+            configMapKeyRef:
+              key: appdevdemo.property.CLIENT_SECRET
+              name: appdev-demo-cm
+        - name: OAUTH_TOKEN_ENDPOINT_URI
+          valueFrom:
+            configMapKeyRef:
+              key: appdevdemo.property.OAUTH_TOKEN_ENDPOINT_URI
+              name: appdev-demo-cm
+        - name: APP_ID
+          valueFrom:
+            configMapKeyRef:
+              key: appdevdemo.property.APP_ID
+              name: appdev-demo-cm
+        image: quay.io/jmaira/appdev_producer:e84b571
+        name: producer
+        ports:
+        - containerPort: 8080
+          protocol: TCP
