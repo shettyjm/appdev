@@ -50,4 +50,4 @@ spec:
                 configMapKeyRef:
                   name: appdev-demo-cm
                   key: appdevdemo.property.APP_ID
-          
+  
