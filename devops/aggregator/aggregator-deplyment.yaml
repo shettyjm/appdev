@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: aggregator
-          image: 'quay.io/jmaira/appdev_aggregator:0.0.5'
+          image: 'quay.io/jmaira/appdev_aggregator:48fba73'
           ports:
             - containerPort: 8080
               protocol: TCP
