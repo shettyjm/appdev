@@ -111,8 +111,8 @@ jobs:
            docker push quay.io/jmaira/appdev_producer:${{ steps.vars.outputs.sha_short }}
         
       - name: Setup Kustomize
-          uses: imranismail/setup-kustomize@v1
-          with:
+        uses: imranismail/setup-kustomize@v1
+         with:
             kustomize-version: "3.8.7"
       - name: new docker image tag for kustomize
         env:
