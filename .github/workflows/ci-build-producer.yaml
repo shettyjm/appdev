@@ -157,10 +157,14 @@ jobs:
         run: |
           cd $(pwd)/ss-devops
          
-          
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git add devops/producer/producer-deployment.yaml
           git commit -am "Bump docker tag to ${NEW_TAG} "
           git push origin main
+        env :
+          REPO_KEY :  ${{ secrets.GITHUB_TOKEN}}
+          USERNAME : github-actions
       - name: Run a one-line script
         run: echo Hello, world!
 
