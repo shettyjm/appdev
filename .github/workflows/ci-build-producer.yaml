@@ -80,7 +80,7 @@ jobs:
             ${{ runner.os }}-${{ matrix.os }}-maven-
       - name: Maven Init
         run: |
-          cd $GITHUB_WORKSPACE/producer && chmod a+x ./mvnw && ./mvnw quarkus:add-extension -Dextensions="container-image-docker" && ./mvnw clean install
+          cd $GITHUB_WORKSPACE/producer && chmod a+x ./mvnw && ./mvnw quarkus:add-extension -Dextensions="container-image-docker" && ./mvnw clean install -DskipTests
           
       #  && ./mvnw quarkus:dev &
       #    wait-port 8080
@@ -95,7 +95,7 @@ jobs:
         
       - name: Run quarkus native package building
         run: |     
-           cd $GITHUB_WORKSPACE/producer && ./mvnw package -Pnative -Dquarkus.container-image.builder=docker -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true -Dquarkus.container-image.tag=${{ steps.vars.outputs.sha_short }} 
+           cd $GITHUB_WORKSPACE/producer && ./mvnw package -Pnative  -DskipTests -Dquarkus.container-image.builder=docker -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true -Dquarkus.container-image.tag=${{ steps.vars.outputs.sha_short }} 
            docker images
      #   cd $GITHUB_WORKSPACE && ./mvnw package -Pnative 
      #     cd $GITHUB_WORKSPACE &&
