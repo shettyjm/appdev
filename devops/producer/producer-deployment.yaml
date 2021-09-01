@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: producer
-          image: 'quay.io/jmaira/appdev_producer:18b1570'
+          image: 'quay.io/jmaira/appdev_producer:48fba73'
           ports:
             - containerPort: 8080
               protocol: TCP
