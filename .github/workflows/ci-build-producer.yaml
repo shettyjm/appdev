@@ -109,7 +109,8 @@ jobs:
           kustomize build $KUSTOMIZE_HOME > $WORK_DIR/devops/producer/producer-deployment.yaml
       - name: Commit files
         run: |
-          cd $(pwd)/ss-devops
+          cd $(pwd)
+          ls -ltra
          
           
           git add devops/producer/producer-deployment.yaml
