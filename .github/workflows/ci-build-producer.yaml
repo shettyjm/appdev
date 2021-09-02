@@ -92,6 +92,28 @@ jobs:
       - name: Set commit tag sha1 outputs
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+      
+      - name: Run quarkus native package building
+        run: |     
+           cd $GITHUB_WORKSPACE/producer && ./mvnw package -Pnative  -DskipTests -Dquarkus.container-image.builder=docker -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true -Dquarkus.container-image.tag=${{ steps.vars.outputs.sha_short }} 
+           docker images
+     #   cd $GITHUB_WORKSPACE && ./mvnw package -Pnative 
+     #     cd $GITHUB_WORKSPACE &&
+     #         docker image tag runner/$SERVICE_NAME:${{ steps.vars.outputs.sha_short }}    gcr.io/$PROJECT_ID/$SERVICE_NAME:${{ steps.vars.outputs.sha_short }}
+
+      - name: list docker images
+        run:  docker images 
+      - name: tag imge for quay.io push
+        run : |
+           docker login -u=${{ secrets.DOCKER_USER }} -p=${{ secrets.DOCKER_PASSWORD }} quay.io
+           docker image tag runner/kafka-streams-appdevdemo-producer:${{ steps.vars.outputs.sha_short }}    quay.io/jmaira/appdev_producer:${{ steps.vars.outputs.sha_short }}
+           docker images 
+           docker push quay.io/jmaira/appdev_producer:${{ steps.vars.outputs.sha_short }}
+        
+      - name: Setup Kustomizea
+        uses: imranismail/setup-kustomize@v1
+        with:
+            kustomize-version: "3.8.7"
       - name: new docker image tag for kustomize
         env:
           NEW_TAG: ${{ steps.vars.outputs.sha_short }}
@@ -122,54 +144,6 @@ jobs:
           REPO_KEY :  ${{ secrets.GITHUB_TOKEN}}
           USERNAME : github-actions
         
-      - name: Run quarkus native package building
-        run: |     
-           cd $GITHUB_WORKSPACE/producer && ./mvnw package -Pnative  -DskipTests -Dquarkus.container-image.builder=docker -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true -Dquarkus.container-image.tag=${{ steps.vars.outputs.sha_short }} 
-           docker images
-     #   cd $GITHUB_WORKSPACE && ./mvnw package -Pnative 
-     #     cd $GITHUB_WORKSPACE &&
-     #         docker image tag runner/$SERVICE_NAME:${{ steps.vars.outputs.sha_short }}    gcr.io/$PROJECT_ID/$SERVICE_NAME:${{ steps.vars.outputs.sha_short }}
-
-      - name: list docker images
-        run:  docker images 
-      - name: tag imge for quay.io push
-        run : |
-           docker login -u=${{ secrets.DOCKER_USER }} -p=${{ secrets.DOCKER_PASSWORD }} quay.io
-           docker image tag runner/kafka-streams-appdevdemo-producer:${{ steps.vars.outputs.sha_short }}    quay.io/jmaira/appdev_producer:${{ steps.vars.outputs.sha_short }}
-           docker images 
-           docker push quay.io/jmaira/appdev_producer:${{ steps.vars.outputs.sha_short }}
-        
-      - name: Setup Kustomizea
-        uses: imranismail/setup-kustomize@v1
-        with:
-            kustomize-version: "3.8.7"
-      - name: new docker image tag for kustomizea
-        env:
-          NEW_TAG: ${{ steps.vars.outputs.sha_short }}
-        run: |
-          WORK_DIR=$(pwd)
-          echo $WORK_DIR
-          KUSTOMIZE_HOME=$(mktemp -d)
-          echo $KUSTOMIZE_HOME
-          ls $KUSTOMIZE_HOME
-          cp $WORK_DIR/devops/producer/producer-deployment.yaml $KUSTOMIZE_HOME/deploy.yaml
-          cd $KUSTOMIZE_HOME
-          kustomize create --resources deploy.yaml
-          kustomize edit set image "quay.io/jmaira/appdev_producer"="quay.io/jmaira/appdev_producer:"$NEW_TAG
-          cd $WORK_DIR
-          kustomize build $KUSTOMIZE_HOME > $WORK_DIR/devops/producer/producer-deployment.yaml
-      - name: Commit files
-        run: |
-          cd $(pwd)/ss-devops
-         
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add devops/producer/producer-deployment.yaml
-          git commit -am "Bump docker tag to ${NEW_TAG} "
-          git push origin main
-        env :
-          REPO_KEY :  ${{ secrets.GITHUB_TOKEN}}
-          USERNAME : github-actions
       - name: Run a one-line script
         run: echo Hello, world!
 
