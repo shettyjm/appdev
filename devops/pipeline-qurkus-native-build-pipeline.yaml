@@ -1,0 +1,117 @@
+﻿apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: qurkus-native-build-pipeline
+  namespace: appdevdemo
+  
+spec:
+  params:
+    - description: The git repository URL to clone from.
+      name: gitUrl
+      type: string
+    - description: The git branch to clone.
+      name: gitRevision
+      type: string
+    - default: producer
+      description: the context directory from where to build the application
+      name: contextDir
+      type: string
+    - default: latest12901
+      description: git commit long sha
+      name: git-commit-sha
+      type: string
+    - default: registry.access.redhat.com/ubi8/openjdk-11
+      description: base image to run maven build and output image build
+      name: baseImage
+      type: string
+    - default: registry.access.redhat.com/ubi8/ubi-minimal
+      description: 'base image to run maven build and output image build - native, minial'
+      name: baseImageMinimal
+      type: string
+    - default: latest
+      description: image tag to push
+      name: image_tag
+      type: string
+    - default: quay.io
+      description: image registry
+      name: image_registry
+      type: string
+    - default: jmaira+osgitopsuser
+      description: image registry creds username
+      name: image_reg_username
+      type: string
+    - default: quay.io_reobot_user_password
+      description: image registry creds password
+      name: image_reg_password
+      type: string
+    - default: quay.io_userid
+      description: image registry repo organization aka group
+      name: image_org
+      type: string
+    - default: default
+      description: image registry repo organization aka group
+      name: image_org_repo
+      type: string
+  tasks:
+    - name: fetch-repository
+      params:
+        - name: url
+          value: $(params.gitUrl)
+        - name: revision
+          value: $(params.gitRevision)
+        - name: deleteExisting
+          value: 'true'
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+    - name: git-short-sha-generation
+      params:
+        - name: git-commit-id
+          value: $(params.git-commit-sha)
+      runAfter:
+        - fetch-repository
+      taskRef:
+        kind: Task
+        name: git-short-sha-task
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+    - name: build-push-image
+      params:
+        - name: MAVEN_IMAGE
+          value: >-
+            gcr.io/cloud-builders/mvn@sha256:57523fc43394d6d9d2414ee8d1c85ed7a13460cbb268c3cd16d28cfb3859e641
+        - name: CONTEXT_DIR
+          value: $(params.contextDir)
+        - name: GOALS
+          value:
+            - '-DskipTests=true'
+            - '-Dquarkus.jib.base-native-image=$(params.baseImageMinimal)'
+            - '-Dquarkus.container-image.insecure=true'
+            - '-Dquarkus.container-image.registry=$(params.image_registry)'
+            - '-Dquarkus.container-image.tag=$(params.git-commit-sha)'
+            - '-Dquarkus.container-image.username=$(params.image_reg_username)'
+            - '-Dquarkus.container-image.password=$(params.image_reg_password)'
+            - '-Dquarkus.container-image.build=true'
+            - '-Dquarkus.container-image.push=true'
+            - '-Dquarkus.container-image.group=$(params.image_org)'
+            - '-Dquarkus.container-image.name=$(params.image_org_repo)'
+            - '-Dquarkus.container-image.builder=jib'
+            - clean
+            - package
+      runAfter:
+        - fetch-repository
+      taskRef:
+        kind: Task
+        name: maven
+      workspaces:
+        - name: maven-settings
+          workspace: maven-settings
+        - name: source
+          workspace: shared-workspace
+  workspaces:
+    - name: shared-workspace
+    - name: maven-settings
