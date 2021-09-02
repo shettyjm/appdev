@@ -108,12 +108,39 @@ jobs:
            docker images 
            docker push quay.io/jmaira/appdev_aggregator:${{ steps.vars.outputs.sha_short }}
         
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell key update trigger again
-      - name: Run a multi-line script
+      - name: Setup Kustomize
+        uses: imranismail/setup-kustomize@v1
+        with:
+            kustomize-version: "3.8.7"
+      - name: new docker image tag for kustomize
+        env:
+          NEW_TAG: ${{ steps.vars.outputs.sha_short }}
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          WORK_DIR=$(pwd)
+          echo $WORK_DIR
+          KUSTOMIZE_HOME=$(mktemp -d)
+          echo $KUSTOMIZE_HOME
+          ls $KUSTOMIZE_HOME
+          cp $WORK_DIR/devops/aggregator/aggregator-deplyment.yaml $KUSTOMIZE_HOME/deploy.yaml
+          cd $KUSTOMIZE_HOME
+          kustomize create --resources deploy.yaml
+          kustomize edit set image "quay.io/jmaira/appdev_aggregator"="quay.io/jmaira/appdev_aggregator:"$NEW_TAG
+          cd $WORK_DIR
+          kustomize build $KUSTOMIZE_HOME > $WORK_DIR/devops/aggregator/aggregator-deplyment.yaml
+      - name: Commit files
+        run: |
+          cd $(pwd)
+          ls -ltra
+         
+          
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add devops/aggregator/aggregator-deplyment.yaml
+          git commit -am "Bump docker tag to ${NEW_TAG} "
+          git push origin main
+        env :
+          REPO_KEY :  ${{ secrets.GITHUB_TOKEN}}
+          USERNAME : github-actions
+      - name: Run a one-line script
+        run: echo Succesffuly built Aggregator. ready for deployment using argocd!
       

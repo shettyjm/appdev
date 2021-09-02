@@ -145,11 +145,11 @@ jobs:
           USERNAME : github-actions
         
       - name: Run a one-line script
-        run: echo Hello, world!
+        run: echo Succesffuly built Producer. ready for deployment using argocd!
 
       # Runs a set of commands using the runners shell key update trigger again
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      # - name: Run a multi-line script
+      #   run: |
+      #     echo Add other actions to build,
+      #     echo test, and deploy your project.
       
