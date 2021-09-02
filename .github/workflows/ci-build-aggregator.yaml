@@ -135,6 +135,7 @@ jobs:
           
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          git pull
           git add devops/aggregator/aggregator-deplyment.yaml
           git commit -am "Bump docker tag to ${NEW_TAG} "
           git push origin main
