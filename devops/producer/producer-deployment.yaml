@@ -44,7 +44,7 @@ spec:
             configMapKeyRef:
               key: appdevdemo.property.APP_ID
               name: appdev-demo-cm
-        image: quay.io/jmaira/appdev_producer:d756751
+        image: quay.io/jmaira/appdev_producer:4223b3d
         name: producer
         ports:
         - containerPort: 8080
