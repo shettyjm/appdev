@@ -22,7 +22,7 @@ spec:
         - name: BOOTSTRAP_SERVER
           valueFrom:
             configMapKeyRef:
-              key: appdevdemo.property.BOOTSTRAP_SERVER
+              key: appdevdemo.property.BOOTSTRAP_SERVER-N
               name: appdev-demo-cm
         - name: CLIENT_ID
           valueFrom:
