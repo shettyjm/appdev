@@ -4,22 +4,11 @@ metadata:
   name: appdev-demo-cm
   namespace: appdevdemo
 data:
-  appdevdemo.property.APP_ID: value-3
-  appdevdemo.property.BOOTSTRAP_SERVER: 'appdevdemo-c-nsfps--f--bbnnbhkg.bf2.kafka.rhcloud.com:443'
+  appdevdemo.property.APP_ID: value-6
+  appdevdemo.property.BOOTSTRAP_SERVER: 'appdevdemo-c-p-v-qkdgebmu-b--bg.bf2.kafka.rhcloud.com:443'
   appdevdemo.property.CLIENT_ID: srvc-acct-1b828ee2-06ad-4627-a546-11bbfa29deef
   appdevdemo.property.CLIENT_SECRET: 265078dc-901f-46d5-bfc1-e7dd6ed342f5
   appdevdemo.property.GROUP_ID: appdev-demo-group-quarkus-water-e7dd6ed342f5
   appdevdemo.property.OAUTH_TOKEN_ENDPOINT_URI: >-
     https://identity.api.openshift.com/auth/realms/rhoas/protocol/openid-connect/token
-  appdevdemo.property.file: >-
-    property.BOOTSTRAP_SERVER=appdevdemo-c-nsfps--f--bbnnbhkg.bf2.kafka.rhcloud.com:443
-   
-    property.CLIENT_ID=srvc-acct-1b828ee2-06ad-4627-a546-11bbfa29deef
-
-    property.CLIENT_SECRET=265078dc-901f-46d5-bfc1-e7dd6ed342f5
-
-    property.OAUTH_TOKEN_ENDPOINT_URI=https://identity.api.openshift.com/auth/realms/rhoas/protocol/openid-connect/token
-
-    property.GROUP_ID_SECRET=appdev-demo-group-quarkus-water-e7dd6ed342f5
-
-    property.APP_ID=value-4
+ 
