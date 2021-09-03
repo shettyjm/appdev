@@ -39,8 +39,9 @@ public class WaterUsageEventGenerator {
                         new HydrologicRegion(7, "Statewide Average", 85),
                         new HydrologicRegion(8, "South Coast", 80),
                         new HydrologicRegion(9, "Central Coast", 71),
+                        
                         new HydrologicRegion(10, "Northern Coast", 71),
-                      //  new HydrologicRegion(12, "So Cal", 141),
+                         new HydrologicRegion(12, "So Cal", 141),
                         new HydrologicRegion(11, "San FranciscoBay", 71));
                         
 
@@ -53,11 +54,12 @@ public class WaterUsageEventGenerator {
 
                    
                     double averageDailyPerCapitaUsage = BigDecimal.valueOf(
-                        random.nextInt((11) )
+                        random.nextInt((110) )
                         // random.nextGaussian() * 15 
                         + hydroRegion.averageDailyPerCapitaUsage)
                             .setScale(1, RoundingMode.HALF_UP)
-                            .doubleValue();
+                            .doubleValue()
+;
 
                     LOG.infov("hydroRegion: {0}, perCapitaConsumption: {1}", hydroRegion.name, averageDailyPerCapitaUsage);
                     return Record.of(hydroRegion.id, Instant.now() + ";" + averageDailyPerCapitaUsage);
