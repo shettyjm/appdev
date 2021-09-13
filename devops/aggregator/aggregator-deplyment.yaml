@@ -44,7 +44,7 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.uid
-        image: quay.io/jmaira/appdev_aggregator:86103c0
+        image: quay.io/jmaira/appdev_aggregator:4a410aa
         name: aggregator
         ports:
         - containerPort: 8080
