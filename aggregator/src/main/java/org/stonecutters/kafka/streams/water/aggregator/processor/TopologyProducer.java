@@ -53,6 +53,7 @@ public class TopologyProducer {
                         (hlRegionId, timestampAndValue) -> hlRegionId,
                         (timestampAndValue, hlRegion) -> {
                             String[] parts = timestampAndValue.split(";");
+                            System.out.println("New event recieved for "+ hlRegion.name);
                             return new WaterConsumptionEvent(hlRegion.id, hlRegion.name,
                                     Instant.parse(parts[0]), Double.valueOf(parts[1]));
                         }
