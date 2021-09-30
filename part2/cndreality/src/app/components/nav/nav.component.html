@@ -1,0 +1,40 @@
+<!-- Navigation section
+================================================== -->
+<section class="navbar navbar-default navbar-fixed-top sticky-navigation" role="navigation">
+	<div class="container">
+
+		<div class="navbar-header">
+			<button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="icon icon-bar"></span>
+				<span class="icon icon-bar"></span>
+				<span class="icon icon-bar"></span>
+			</button>
+			<a href="#" class="navbar-brand">CND Reality</a>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav navbar-right main-navigation">
+				<li><a href="#home" class="smoothScroll">HOME</a></li>
+				<li><a href="#about" class="smoothScroll">ABOUT</a></li>
+			
+				<li><a [routerLink]="['/covid']" class="smoothScroll">COVID SAFETY</a></li>
+                <li><a href="#testimonial" class="smoothScroll">TESTIMONIALS</a></li>
+				<li><a href="#blog" class="smoothScroll">BLOG</a></li>
+				<li><a href="#contact" class="smoothScroll">CONTACT</a></li>
+
+				<li *ngIf="isLoggedIn" class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Welcome 
+						{{userName}}
+					</a>
+					<ul class="dropdown-menu hovr_nav_tab">
+					  <li><a href="javascript: void(0);" (click)="logout()">LOG OUT</a></li>
+					</ul>
+				  </li>
+				   <!-- <button *ngIf="!isLoggedIn" type="button" (click)="login()">Log in</button> -->
+				<li *ngIf="!isLoggedIn"><a href="javascript: void(0);" (click)="login()">LOG IN</a></li>
+
+		
+			</ul>
+		</div>
+
+	</div>
+</section>
