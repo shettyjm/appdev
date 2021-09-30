@@ -30,9 +30,9 @@ spec:
               key: appdev-apidemo.property.KEYCLOAK_REALM
               name: appdev-apidemo-cm
         - name: DEBUG
-          value: true
+          value: "true"
         - name: sample_env
-          value: sample_env_value
+          value: "sample_env_value"
         image: quay.io/jmaira/appdev_apidemofe:c33b96b
         name: cndreality
         ports:
