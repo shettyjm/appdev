@@ -1,13 +1,13 @@
-# This is a basic workflow to help you get started with Actions trigger
+# This is a basic workflow to help you get started with Actions trigger 1
 #test
 
-name: CI-quarkus-kafka-producer
+name: CI-hcdemo-frontend-pipeline
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main-producer ]
+    branches: [ main ]
 #   pull_request:
 #     branches: [ main ]
 
@@ -17,34 +17,25 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  quarkus_native_build:
+  frontend-ang_build:
     # The type of runner that the job will run on
     
     strategy:
       matrix:
         java: [11]
         os: [ubuntu-latest]
-        nodejs-version: [12]
-        python-version: [3.8]
+        nodejs-version: [12.x]
+        
         docker-version: [19.09]
         docker-channel: [stable]
         
-    name: Java ${{ matrix.java }} on ${{ matrix.os }}
+    name: node ${{ matrix.nodejs-version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     env:
       HASH: $(git rev-parse --short "$GITHUB_SHA")
       BRANCH: ${GITHUB_REF##*/}
       SERVICE_NAME: ${{ secrets.SERVICE_NAME }}
-      BOOTSTRAP_SERVER : ${{ secrets.BOOTSTRAP_SERVER }}
-      CLIENT_ID : ${{ secrets.CLIENT_ID }}
-      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-      GROUP_ID: ${{ secrets.GROUP_ID }}
-      OAUTH_TOKEN_ENDPOINT_URI: ${{ secrets.OAUTH_TOKEN_ENDPOINT_URI }}
-      APP_ID: APPDEV_APP_GHA_12345
-      
-
-   #   PROJECT_ID: ${{ secrets.PROJECT_ID }}
-
+     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -67,50 +58,34 @@ jobs:
       #   run: |-
       #     gcloud auth configure-docker -q   
      
-      - name: Setup java ${{ matrix.java }}
-        uses: actions/setup-java@v1
-        with:
-          java-version: ${{ matrix.java }}
-      - name: Cache maven deps ~/.m2/repository
+      
+      - name: Cache node modules
         uses: actions/cache@v1
         with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-${{ matrix.os }}-maven-
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-${{ matrix.os }}-maven-
-      - name: Maven Init
-        run: |
-          cd $GITHUB_WORKSPACE/producer && chmod a+x ./mvnw && ./mvnw quarkus:add-extension -Dextensions="container-image-docker" && ./mvnw clean install -DskipTests
+            ${{ runner.os }}-node-
+      - name: Node ${{ matrix.node-version }} build production
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
           
-      #  && ./mvnw quarkus:dev &
-      #    wait-port 8080
-      # Runs a single command using the runners shell
-      # - name: Run maven test
-      #   run: |
-      #      cd $GITHUB_WORKSPACE && ./mvnw test 
-      #     cd $GITHUB_WORKSPACE && ./mvnw compile quarkus:dev -Ddebug=false && wait-port 8080 &&  echo 'q'
       - name: Set commit tag sha1 outputs
         id: vars
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
       
-      - name: Run quarkus native package building
-        run: |     
-           cd $GITHUB_WORKSPACE/producer && ./mvnw package -Pnative  -DskipTests -Dquarkus.container-image.builder=docker -Dquarkus.native.container-build=true -Dquarkus.container-image.build=true -Dquarkus.container-image.tag=${{ steps.vars.outputs.sha_short }} 
-           docker images
-     #   cd $GITHUB_WORKSPACE && ./mvnw package -Pnative 
-     #     cd $GITHUB_WORKSPACE &&
-     #         docker image tag runner/$SERVICE_NAME:${{ steps.vars.outputs.sha_short }}    gcr.io/$PROJECT_ID/$SERVICE_NAME:${{ steps.vars.outputs.sha_short }}
-
       - name: list docker images
         run:  docker images 
-      - name: tag imge for quay.io push
+      - name: build,tag, push container image to quay.io push
         run : |
-           docker login -u=${{ secrets.DOCKER_USER }} -p=${{ secrets.DOCKER_PASSWORD }} quay.io
-           docker image tag runner/kafka-streams-appdevdemo-producer:${{ steps.vars.outputs.sha_short }}    quay.io/jmaira/appdev_producer:${{ steps.vars.outputs.sha_short }}
+           cd part2/cndreality
+           docker build . -t quay.io/jmaira/appdev_apidemofe:${{ steps.vars.outputs.sha_short }}
            docker images 
-           docker push quay.io/jmaira/appdev_producer:${{ steps.vars.outputs.sha_short }}
+           docker login -u=${{ secrets.DOCKER_USER }} -p=${{ secrets.DOCKER_PASSWORD }} quay.io
+           docker push quay.io/jmaira/appdev_apidemofe:${{ steps.vars.outputs.sha_short }}
         
-      - name: Setup Kustomizea
+      - name: Setup Kustomize
         uses: imranismail/setup-kustomize@v1
         with:
             kustomize-version: "3.8.7"
@@ -123,12 +98,12 @@ jobs:
           KUSTOMIZE_HOME=$(mktemp -d)
           echo $KUSTOMIZE_HOME
           ls $KUSTOMIZE_HOME
-          cp $WORK_DIR/devops/producer/producer-deployment.yaml $KUSTOMIZE_HOME/deploy.yaml
+          cp $WORK_DIR/devops/apidemo/frontend/cndportal-svc-deploy.yaml $KUSTOMIZE_HOME/deploy.yaml
           cd $KUSTOMIZE_HOME
           kustomize create --resources deploy.yaml
-          kustomize edit set image "quay.io/jmaira/appdev_producer"="quay.io/jmaira/appdev_producer:"$NEW_TAG
+          kustomize edit set image "quay.io/jmaira/appdev_apidemofe"="quay.io/jmaira/appdev_apidemofe:"$NEW_TAG
           cd $WORK_DIR
-          kustomize build $KUSTOMIZE_HOME > $WORK_DIR/devops/producer/producer-deployment.yaml
+          kustomize build $KUSTOMIZE_HOME > $WORK_DIR/devops/apidemo/frontend/cndportal-svc-deploy.yaml
       - name: Commit files
         run: |
           cd $(pwd)
@@ -138,7 +113,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git pull
-          git add devops/producer/producer-deployment.yaml
+          git add devops/apidemo/frontend/cndportal-svc-deploy.yaml
           git commit -am "Bump docker tag to ${NEW_TAG} "
           git push origin main
         env :
@@ -146,7 +121,7 @@ jobs:
           USERNAME : github-actions
         
       - name: Run a one-line script
-        run: echo Succesffuly built Producer. ready for deployment using argocd!
+        run: echo Succesffuly built fronend portal. ready for deployment using argocd!
 
       # Runs a set of commands using the runners shell key update trigger again
       # - name: Run a multi-line script

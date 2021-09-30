@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: appdev-apidemo-cndreality-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apidemo-cndreality
+  template:
+    metadata:
+      labels:
+        app: apidemo-cndreality
+    spec:
+      containers:
+      - env:
+        - name: KEYCLOAK_URL
+          valueFrom:
+            configMapKeyRef:
+              key: appdev-apidemo.property.KEYCLOAK_URL
+              name: appdev-apidemo-cm
+        - name: KEYCLOAK_CLIENT_ID
+          valueFrom:
+            configMapKeyRef:
+              key: appdev-apidemo.property.KEYCLOAK_CLIENT_ID
+              name: appdev-apidemo-cm
+        - name: KEYCLOAK_REALM
+          valueFrom:
+            configMapKeyRef:
+              key: appdev-apidemo.property.KEYCLOAK_REALM
+              name: appdev-apidemo-cm
+        - name: DEBUG
+          value: true
+        - name: sample_env
+          value: sample_env_value
+        image: quay.io/jmaira/appdev_apidemofe:c33b96b
+        name: cndreality
+        ports:
+        - containerPort: 8081
+          protocol: TCP
