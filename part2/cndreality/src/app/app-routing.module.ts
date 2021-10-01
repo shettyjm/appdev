@@ -15,7 +15,8 @@ const routes: Routes = [
    // { path: 'doctors', component: DoctorsComponent,canActivate: [AlwaysAuthGuard] },
    { path: 'home', component: HomeComponent},
    { path: 'about', component: AboutComponent },
-   { path: 'covid', component: CovidsafezoneComponent,canActivate: [AuthGuard] } 
+   { path: 'covid', component: CovidsafezoneComponent,canActivate: [AuthGuard] } ,
+   {path: '**', redirectTo: '/error'}
   ];
 
 @NgModule({
