@@ -33,7 +33,7 @@ spec:
           value: "true"
         - name: sample_env
           value: sample_env_value
-        image: quay.io/jmaira/appdev_apidemofe:26403eb
+        image: quay.io/jmaira/appdev_apidemofe:50826b7
         name: cndreality
         ports:
         - containerPort: 8081
