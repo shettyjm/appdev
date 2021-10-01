@@ -34,6 +34,7 @@ FROM nginx:stable
 RUN ls -ltra
 COPY --from=build /dist /usr/share/nginx/html
 COPY ./start-nginx.sh /usr/bin/start-nginx.sh
+COPY nginx.conf /etc/nginx/conf.d/
 
 RUN ls -ltra
 RUN chmod +x /usr/bin/start-nginx.sh
@@ -42,7 +43,7 @@ WORKDIR /usr/share/nginx/html
 
 #openshift
 RUN chmod g+rwx /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html/assets/env.js /usr/share/nginx/html/assets/env.template.js
-RUN sed -i.bak 's/listen\(.*\)80;/listen 8081;/' /etc/nginx/conf.d/default.conf
+# RUN sed -i.bak 's/listen\(.*\)80;/listen 8081;/' /etc/nginx/conf.d/default.conf
 RUN sed -i.bak 's/^user/#user/' /etc/nginx/nginx.conf
 
 # Expose port 80
