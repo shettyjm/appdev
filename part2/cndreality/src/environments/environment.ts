@@ -4,8 +4,9 @@
 
 
 export const environment = {
-  production: false,
+   production: false,
   //configFile: 'assets/config/config.dev.json',
+   threescaleApiUrl :  window.threescaleApiUrl || "https://hr-oidc-product-3scale-apicast-staging.apps.sacluster.stonecutterspod.live",
    apiUrl:  window.apiUrl || "http://dev-localhost:8090",
    KeyCloakUrl :  window.KeyCloakUrl|| "http://dev-localhost:8080/auth",
    KeyCloakRealm:   window.KeyCloakRealm || "dev-master",

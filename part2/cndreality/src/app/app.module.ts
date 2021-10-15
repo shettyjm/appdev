@@ -62,5 +62,6 @@ declare global {
     KeyCloakUrl?:any;
     KeyCloakRealm?:any;
     KeyCloakClientId?:any;
+    threescaleApiUrl?:any;
   }
 }
