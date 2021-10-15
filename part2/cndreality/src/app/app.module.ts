@@ -17,7 +17,7 @@ import { CountersComponent } from './components/counters/counters.component';
 import { initializeKeycloak } from './init/keycloak-int.factory';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { CovidsafezoneComponent } from './components/covidsafezone/covidsafezone.component';
-
+import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,6 +36,7 @@ import { CovidsafezoneComponent } from './components/covidsafezone/covidsafezone
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     KeycloakAngularModule
   ],
   providers: 
