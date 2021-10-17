@@ -24,8 +24,13 @@ export class RestServiceProviderService {
 
   }
 
-  getEmployees(): Observable<any> {
-    return this.http.get(`doctors`);
+  getEmployees(token:string): Observable<[Employee]> {
+    this.headers.set("Authorization","Bearer "+token)
+    return this.http.get<[Employee]>(`${this.rootURL}/employees`,{ headers: this.headers })
+    .pipe(
+      retry(1),
+      catchError(this.handleError)
+    )
   }
 
   getEmployee(id:any,token:string): Observable<Employee> {

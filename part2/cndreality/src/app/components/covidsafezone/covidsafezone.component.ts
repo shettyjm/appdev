@@ -38,7 +38,7 @@ export class CovidsafezoneComponent implements OnInit {
   // Get doctos list
   loadEmployess() {
     console.log("loading")
-    return this.employeeService.getEmployee(1,this.token).subscribe((data: {}) => {
+    return this.employeeService.getEmployees(this.token).subscribe((data: {}) => {
       this.employee = data;
       console.log(this.employee);
     })
