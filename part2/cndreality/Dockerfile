@@ -18,7 +18,7 @@ RUN ls -ltra
 
 # Generate the build of the application
 RUN npm install -g @angular/cli
-RUN ng build --configuration production --output-path=/dist
+RUN ng build --configuration development --output-path=/dist
 
 
 # Stage 2: Serve app with nginx server
