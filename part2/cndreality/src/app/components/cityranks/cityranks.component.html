@@ -1,0 +1,46 @@
+<!-- Contact section
+================================================== -->
+<section id="contact" class="parallax-section">
+	<div class="container">
+		<div class="row">
+
+
+			<!-- "id": 1,
+            "country": "Switzerland",
+            "city_name": "Basel",
+            "cpi_and_rent_index": 90.1359163150788,
+            "rent_index": 47.72953844461662,
+            "purchasing_power_incl_rent_index": 135.17535795816121,
+            "restaurant_price_index": 127.7220643349051,
+            "groceries_index": 124.35743301742603,
+            "city_id": 6348,
+            "cpi_index": 128.62588475320365 -->
+
+			<!-- Contact form section
+			================================================== -->
+			<div *ngFor="let city of cities; let i = index">
+				<div class="col-md-4 col-sm-4 wow fadeInUp" data-wow-delay="0.9s">
+					<div class="contact-detail">
+						<h2>country : {{city.country}}</h2>
+						<div>
+							<h4>City : {{city.city_name}}</h4>
+							<p>Rent Index : {{city.rent_index}}</p>
+						</div>
+						<div>
+							<h4>Talk to Us</h4>
+							<p>Email: hello@company.com</p>
+							<p>Tel: 010-020-0770 &nbsp;&nbsp;&nbsp; Fax: 090-080-0430</p>
+						</div>
+					</div>
+				</div>
+				
+				
+		
+
+			</div>
+
+		</div>
+
+
+	</div>
+</section>

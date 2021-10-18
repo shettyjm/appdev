@@ -1,0 +1,5 @@
+oc process -f https://raw.githubusercontent.com/jbossdemocentral/3scale-security-oidc-demo/master/support/templates/accidentalert-ui-template.json -p SSO_URL='https://secure-sso-rh-sso.apps.sacluster.stonecutterspod.live' -p BACKEND_URL='http://accidentalert-backend-service.apps.sacluster.stonecutterspod.live' -p APPLICATION_HOSTNAME='www-accidentalert-ui.apps.sacluster.stonecutterspod.live' | oc create -f -
+
+
+
+https://medium.com/@tamber/api-management-security-series-3scale-oidc-using-rh-sso-demo-643feb1e1c0d

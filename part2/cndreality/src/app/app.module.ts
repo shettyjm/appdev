@@ -18,6 +18,8 @@ import { initializeKeycloak } from './init/keycloak-int.factory';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { CovidsafezoneComponent } from './components/covidsafezone/covidsafezone.component';
 import { HttpClientModule } from '@angular/common/http';
+import { CityranksComponent } from './components/cityranks/cityranks.component';
+import { CityrankscorsComponent } from './components/cityrankscors/cityrankscors.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +33,9 @@ import { HttpClientModule } from '@angular/common/http';
     NavComponent,
     TestimonialsComponent,
     CountersComponent,
-    CovidsafezoneComponent
+    CovidsafezoneComponent,
+    CityranksComponent,
+    CityrankscorsComponent
   ],
   imports: [
     BrowserModule,
@@ -63,5 +67,6 @@ declare global {
     KeyCloakRealm?:any;
     KeyCloakClientId?:any;
     threescaleApiUrl?:any;
+    threescaleApiCityUrl?:any;
   }
 }

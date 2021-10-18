@@ -7,6 +7,8 @@ import {  AuthGuard } from './guard/auth.guard';
 
 import { AboutComponent } from './components/about/about.component';
 import { CovidsafezoneComponent } from './components/covidsafezone/covidsafezone.component';
+import { CityranksComponent } from './components/cityranks/cityranks.component';
+import { CityrankscorsComponent } from './components/cityrankscors/cityrankscors.component';
 
 
 
@@ -15,7 +17,9 @@ const routes: Routes = [
    // { path: 'doctors', component: DoctorsComponent,canActivate: [AlwaysAuthGuard] },
    { path: 'home', component: HomeComponent},
    { path: 'about', component: AboutComponent },
-   { path: 'covid', component: CovidsafezoneComponent,canActivate: [AuthGuard] } ,
+   { path: 'covid', component: CovidsafezoneComponent } ,
+   { path: 'cityrank', component: CityranksComponent } ,
+   { path: 'cityrankcors', component: CityrankscorsComponent,canActivate: [AuthGuard] } ,
    {path: '**', redirectTo: '/#home'}
   ];
 
