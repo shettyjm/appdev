@@ -37,6 +37,7 @@ export class CityranksComponent implements OnInit {
  loadCities() {
    console.log("loading cities from backend")
    return this.citiService.getCities().subscribe((data: City[]) => {
+     console.log(this.cities)
      this.cities = data;
      console.log(this.cities);
    })

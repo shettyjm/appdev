@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RestServiceProviderService } from 'src/app/services/rest-service-provider.service';
 import { City } from 'src/models/cities';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-cityrankscors',
@@ -13,7 +14,7 @@ export class CityrankscorsComponent implements OnInit {
   token: string = '';
 
   constructor(
-    private citiService: RestServiceProviderService) { }
+    private citiService: RestServiceProviderService, private _snackBar: MatSnackBar) { }
 
 
   ngOnInit(): void {
@@ -27,6 +28,9 @@ export class CityrankscorsComponent implements OnInit {
     return this.citiService.getCORSCities().subscribe((data: City[]) => {
       this.cities = data;
       console.log(this.cities);
+    }, (err) => {
+      console.error("error occured", err);
+      this._snackBar.open('Error Occured ', 'Error');
     })
   }
 

@@ -2,11 +2,11 @@
     
     window.__env = window.__env || {};
     window.apiUrl ="http://temphost";
-    window.KeyCloakUrl = "http://keycloak-http.apps.sacluster.stonecutterspod.live/auth/";
+    window.KeyCloakUrl = "http://localhost:8080/auth";
     window.KeyCloakRealm="saapigw";
     window.KeyCloakClientId= "be434990";
     window.enableDebug =  "true";
-    window.threescaleApiUrl = "https://hr-oidc-product-3scale-apicast-staging.apps.sacluster.stonecutterspod.live"
+    window.threescaleApiUrl = "https://employeesapi.apps.sacluster.stonecutterspod.live"
     window.threescaleApiCityUrl = "https://city-ranking-info-3scale-apicast-staging.apps.sacluster.stonecutterspod.live"
   })(this);
 

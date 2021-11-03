@@ -18,9 +18,9 @@
 
 			<!-- Contact form section
 			================================================== -->
-			<div *ngFor="let city of cities; let i = index">
-				<div class="col-md-4 col-sm-4 wow fadeInUp" data-wow-delay="0.9s">
-					<div class="contact-detail">
+			<!-- <div *ngFor="let city of cities; let i = index">
+				<div >
+					<div >
 						<h2>country : {{city.country}}</h2>
 						<div>
 							<h4>City : {{city.city_name}}</h4>
@@ -33,11 +33,46 @@
 						</div>
 					</div>
 				</div>
-				
-				
-		
+			</div> -->
 
+
+			<div *ngFor="let city of cities; let i = index" style="margin: 1rem;">
+
+				<mat-card class="example-card">
+					<div fxLayout="row" fxLayoutGap="2rem" fxLayoutAlign="justify-content: space-between" fxFlexFill>
+						<div class="sub-section-1">
+							<img mat-card-lg-image [src]="'../../../assets/modern-town/images/' + 'city' + (i +1) + '.jpeg'">
+
+						</div>
+						<div class="sub-section-2" fxFlex="65">
+							<mat-card-title-group>
+								<mat-card-title>{{city.city_name}}, {{city.country}}</mat-card-title>
+								<mat-card-subtitle>#{{i+1}} in best Places to Live</mat-card-subtitle>
+								<!-- <mat-card-subtitle>#{{i+1}} in best Places to Live</mat-card-subtitle> -->
+
+							</mat-card-title-group>
+							<mat-card-content>
+								<p>Rent Index: {{city.rent_index}}</p>
+							</mat-card-content>
+						</div>
+						<div class="sub-section-3" f style="border-left: 1px solid rgb(175, 174, 174);">
+							<div fxLayout="column" style="margin-left: 1rem;">
+								<div class="mat-subheading-2"
+									style="color: gray;font-family: Arial, Helvetica, sans-serif">CPI & Rent Index</div>
+								<div class="mat-h3">{{city.cpi_and_rent_index | number : '1.2-2'}}</div>
+
+								<div class="mat-subheading-2"
+									style="color: gray;font-family: Arial, Helvetica, sans-serif">Groceries Index
+								</div>
+								<div class="mat-h3">{{city.groceries_index | number : '1.2-2'}}</div>
+							</div>
+						</div>
+
+					</div>
+
+				</mat-card>
 			</div>
+
 
 		</div>
 

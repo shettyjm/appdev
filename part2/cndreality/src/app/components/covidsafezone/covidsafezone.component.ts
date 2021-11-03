@@ -12,7 +12,7 @@ export class CovidsafezoneComponent implements OnInit {
 
   
 
-   employee: Employee = {};
+   employee: Array<Employee> = [];
    token :string = '';
 
   constructor(private readonly keycloak: KeycloakService,
@@ -38,9 +38,9 @@ export class CovidsafezoneComponent implements OnInit {
   // Get doctos list
   loadEmployess() {
     console.log("loading")
-    return this.employeeService.getEmployees(this.token).subscribe((data: {}) => {
+    return this.employeeService.getEmployees(this.token).subscribe((data: Employee[]) => {
       this.employee = data;
-      console.log(this.employee);
+      console.log(data);
     })
   }
 

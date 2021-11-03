@@ -20,6 +20,12 @@ import { CovidsafezoneComponent } from './components/covidsafezone/covidsafezone
 import { HttpClientModule } from '@angular/common/http';
 import { CityranksComponent } from './components/cityranks/cityranks.component';
 import { CityrankscorsComponent } from './components/cityrankscors/cityrankscors.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatCardModule} from '@angular/material/card';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +47,11 @@ import { CityrankscorsComponent } from './components/cityrankscors/cityrankscors
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    KeycloakAngularModule
+    KeycloakAngularModule,
+    MatSnackBarModule,
+    BrowserAnimationsModule,
+    MatCardModule,
+    FlexLayoutModule
   ],
   providers: 
   //[]
