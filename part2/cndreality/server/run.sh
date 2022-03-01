@@ -17,6 +17,3 @@ if [ -f $file ]; then
 fi
 echo 'server args ' $args
 json-server $args 
-
-
-https://3scale-admin:709a7712-938a-4848-94a4-16336f13480c@keycloak-keycloak.apps.sacluster.stonecutterspod.live/auth/realms/apidemorealm
