@@ -1,0 +1,37 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: be-json-server-deployment
+  namespace: sh-rhoam-demo
+  
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: be-json-server
+  template:
+    metadata:
+
+      labels:
+        app: be-json-server
+    spec:
+      volumes:
+        - name: json-server-data
+          configMap:
+            name: jsonserver-cm
+           
+      containers:
+       
+        - name: be-jspn-server
+          ports:
+            - containerPort: 8081
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: json-server-data
+              mountPath: /db
+          terminationMessagePolicy: File
+          image: 'image-registry:json-server'
+          args:
+            - /db/config.json
+     
